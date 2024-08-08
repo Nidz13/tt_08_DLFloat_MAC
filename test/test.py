@@ -3,8 +3,12 @@
 
 import cocotb
 from cocotb.clock import Clock
-from cocotb.triggers import ClockCycles
-
+from cocotb.triggers import ClockCycles , RisingEdge
+@cocotb.coroutine
+def monitor_signals(dut):
+    while True:
+        yield RisingEdge(dut.clk)  # Wait for any edge on the clock
+        print(f"At time {cocotb.utils.get_sim_time()} ns: clk={dut.clk.value}, ui_in={dut.ui_in.value}, uio_in={dut.uio_in.value},uo_out={dut.uo_out.value},uio_out={dut.uio_out.value}")
 
 @cocotb.test()
 async def test_project(dut):
